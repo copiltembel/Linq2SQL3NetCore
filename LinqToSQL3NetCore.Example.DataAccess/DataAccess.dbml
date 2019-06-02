@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="L2S" EntityNamespace="Db.DataAccess.DataSet" ContextNamespace="Db.DataAccess.DataSet" Class="DbDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.Address" Member="Addresses">
+    <Type Name="Address">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Street" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Number" Type="System.String" DbType="NChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="PostCode" Type="System.String" DbType="NChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="City" Type="System.String" DbType="NChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="CountryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="FK_Country_Addresses" Member="Country" ThisKey="CountryId" OtherKey="Id" Type="Country" IsForeignKey="true" />
+      <Association Name="FK_Person_Addresses" Member="Person" ThisKey="PersonId" OtherKey="Id" Type="Person" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Country" Member="Countries">
+    <Type Name="Country">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="FK_Country_Addresses" Member="Addresses" ThisKey="Id" OtherKey="CountryId" Type="Address" DeleteRule="NO ACTION" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Item" Member="Items">
+    <Type Name="Item">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="FK_Order_Items" Member="Order" ThisKey="OrderId" OtherKey="Id" Type="Order" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Order" Member="Orders">
+    <Type Name="Order">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InsertionDateTime" Type="System.DateTime" DbType="DateTime2(3) NOT NULL" CanBeNull="false" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="FK_Order_Items" Member="Items" ThisKey="Id" OtherKey="OrderId" Type="Item" DeleteRule="NO ACTION" />
+      <Association Name="FK_Person_Orders" Member="Person" ThisKey="PersonId" OtherKey="Id" Type="Person" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Person" Member="Persons">
+    <Type Name="Person">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="FK_Person_Addresses" Member="Addresses" ThisKey="Id" OtherKey="PersonId" Type="Address" DeleteRule="NO ACTION" />
+      <Association Name="FK_Person_Orders" Member="Orders" ThisKey="Id" OtherKey="PersonId" Type="Order" DeleteRule="NO ACTION" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestTable1" Member="TestTable1s">
+    <Type Name="TestTable1">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Dummy" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Dummy2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="FK_TestTable1_TestTable2" Member="TestTable2s" ThisKey="Id" OtherKey="TestTable1Id" Type="TestTable2" DeleteRule="NO ACTION" />
+      <Association Name="FK_TestTable1_TestTable3" Member="TestTable3s" ThisKey="Id" OtherKey="TestTable1Id" Type="TestTable3" DeleteRule="NO ACTION" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestTable2" Member="TestTable2s">
+    <Type Name="TestTable2">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Dummy1" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Dummy2" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TestTable1Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="FK_TestTable1_TestTable2" Member="TestTable1" ThisKey="TestTable1Id" OtherKey="Id" Type="TestTable1" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestTable3" Member="TestTable3s">
+    <Type Name="TestTable3">
+      <Column Name="TestTable3Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TestTable1Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="FK_TestTable1_TestTable3" Member="TestTable1" ThisKey="TestTable1Id" OtherKey="Id" Type="TestTable1" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestTable4" Member="TestTable4s">
+    <Type Name="TestTable4">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.sp_alterdiagram" Method="Sp_alterdiagram">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="version" Type="System.Int32" DbType="Int" />
+    <Parameter Name="definition" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" />
+    <Return Type="System.Int32" DbType="Int" />
+  </Function>
+  <Function Name="dbo.sp_creatediagram" Method="Sp_creatediagram">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="version" Type="System.Int32" DbType="Int" />
+    <Parameter Name="definition" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" />
+    <Return Type="System.Int32" DbType="Int" />
+  </Function>
+  <Function Name="dbo.sp_dropdiagram" Method="Sp_dropdiagram">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" DbType="Int" />
+  </Function>
+  <Function Name="dbo.sp_helpdiagramdefinition" Method="Sp_helpdiagramdefinition">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <ElementType Name="Sp_helpdiagramdefinitionResult">
+      <Column Name="version" Member="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="definition" Member="Definition" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_helpdiagrams" Method="Sp_helpdiagrams">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <ElementType Name="Sp_helpdiagramsResult">
+      <Column Name="Database" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Owner" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="OwnerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_renamediagram" Method="Sp_renamediagram">
+    <Parameter Name="diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Parameter Name="owner_id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="new_diagramname" Type="System.String" DbType="NVarChar(128)" />
+    <Return Type="System.Int32" DbType="Int" />
+  </Function>
+</Database>

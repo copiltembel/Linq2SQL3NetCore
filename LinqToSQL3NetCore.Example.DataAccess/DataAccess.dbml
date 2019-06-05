@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Database Name="L2S" EntityNamespace="Db.DataAccess.DataSet" ContextNamespace="Db.DataAccess.DataSet" Class="DbDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+<Database Name="L2S" EntityNamespace="Db.DataAccess.DataSet" ContextNamespace="Db.DataAccess.DataSet" Class="DbDataContext" Serialization="Unidirectional" EntityBase="DbEntity" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Table Name="dbo.Address" Member="Addresses">
     <Type Name="Address">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

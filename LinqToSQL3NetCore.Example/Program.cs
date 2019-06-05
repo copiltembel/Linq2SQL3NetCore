@@ -1,6 +1,7 @@
 ﻿using Db.DataAccess.DataSet;
 using LinqToSQL3NetCore.Example.DataAccess;
 using Newtonsoft.Json;
+using System.Data.Linq;
 using System.IO;
 using System.Linq;
 
@@ -14,15 +15,20 @@ namespace LinqToSQL3NetCore.Example
 
             DbContext dbContext = new DbContext(connectionString);
 
-            TestDeleteMultiple(dbContext);
-    
-
+            //TestDeleteMultiple(dbContext);
+            TestLoadWhere(dbContext);
+            TestLoadMany(dbContext);
             //var addresses = dbContext.Addresses.ToList();
         }
 
         private static void TestLoadMany(DbContext dbContext)
         {
             var testTable1s = dbContext.TestTable1s.ToList();
+        }
+
+        private static void TestLoadWhere(DbContext dbContext)
+        {
+            var x = dbContext.Addresses.Where(a => a.Id == new DbId<Address, int>(1)).ToList();
         }
 
         static string GetConnectionString(string jsonFileName)

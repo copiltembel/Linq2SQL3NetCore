@@ -202,13 +202,18 @@ namespace System.Data.Linq
 			}
 		}
 
+        internal override int Delete(IReadOnlyList<TrackedObject> items)
+        {
+            return DynamicDelete(items);
+        }
+
 		internal override int DynamicDelete(TrackedObject item)
 		{
 			Expression cmd = this.GetDeleteCommand(item);
 			int ret = (int)this._context.Provider.Execute(cmd).ReturnValue;
 			if(ret == 0)
 			{
-				// we don't yet know if the delete failed because the check constaint did not match
+				// we don't yet know if the delete failed because the check constraint did not match
 				// or item was already deleted.  Verify the item exists
 				cmd = this.GetDeleteVerificationCommand(item);
 				ret = ((int?)this._context.Provider.Execute(cmd).ReturnValue) ?? -1;
@@ -216,7 +221,28 @@ namespace System.Data.Linq
 			return ret;
 		}
 
-		internal override void AppendDeleteText(TrackedObject item, StringBuilder appendTo)
+        internal override int DynamicDelete(IReadOnlyList<TrackedObject> items)
+        {
+            var deleteCommands = new List<Expression>(items.Count);
+            foreach(var item in items)
+            {
+                Expression cmd = this.GetDeleteCommand(item);
+                deleteCommands.Add(cmd);
+            }
+            int ret = (int)this._context.Provider.Execute(deleteCommands).ReturnValue;
+
+            // TODO
+            //if (ret == 0)
+            //{
+            //    // we don't yet know if the delete failed because the check constraint did not match
+            //    // or item was already deleted.  Verify the item exists
+            //    cmd = this.GetDeleteVerificationCommand(item);
+            //    ret = ((int?)this._context.Provider.Execute(cmd).ReturnValue) ?? -1;
+            //}
+            return ret;
+        }
+
+        internal override void AppendDeleteText(TrackedObject item, StringBuilder appendTo)
 		{
 			if(item.Type.Table.DeleteMethod != null)
 			{

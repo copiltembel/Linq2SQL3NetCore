@@ -8,15 +8,15 @@ namespace System.Data.Linq.Provider.Common
 	{
 		DataLoadOptions originalShape;
 		Expression query;
-		QueryInfo[] queryInfos;
+		QueryInfo queryInfo;
 		IObjectReaderFactory factory;
 		ICompiledSubQuery[] subQueries;
 
-		internal AdoCompiledQuery(IReaderProvider provider, Expression query, QueryInfo[] queryInfos, IObjectReaderFactory factory, ICompiledSubQuery[] subQueries)
+		internal AdoCompiledQuery(IReaderProvider provider, Expression query, QueryInfo queryInfo, IObjectReaderFactory factory, ICompiledSubQuery[] subQueries)
 		{
 			this.originalShape = provider.Services.Context.LoadOptions;
 			this.query = query;
-			this.queryInfos = queryInfos;
+			this.queryInfo = queryInfo;
 			this.factory = factory;
 			this.subQueries = subQueries;
 		}
@@ -41,7 +41,7 @@ namespace System.Data.Linq.Provider.Common
 			}
 
 			// execute query (only last query produces results)
-			return provider.ExecuteAll(this.query, this.queryInfos, this.factory, arguments, subQueries);
+			return provider.ExecuteAll(this.query, this.queryInfo, this.factory, arguments, subQueries);
 		}
 
 		private static bool AreEquivalentShapes(DataLoadOptions shape1, DataLoadOptions shape2)

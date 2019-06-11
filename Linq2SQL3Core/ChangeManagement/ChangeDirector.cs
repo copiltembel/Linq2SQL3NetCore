@@ -27,7 +27,9 @@ namespace System.Data.Linq {
         internal abstract void AppendUpdateText(TrackedObject item, StringBuilder appendTo);
 
         internal abstract int Delete(TrackedObject item);
+        internal abstract int Delete(IReadOnlyList<TrackedObject> items);
         internal abstract int DynamicDelete(TrackedObject item);
+        internal abstract int DynamicDelete(IReadOnlyList<TrackedObject> items);
         internal abstract void AppendDeleteText(TrackedObject item, StringBuilder appendTo);
 
         internal abstract void RollbackAutoSync();

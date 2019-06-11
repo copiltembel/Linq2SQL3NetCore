@@ -15,9 +15,9 @@ namespace LinqToSQL3NetCore.Example
 
             DbContext dbContext = new DbContext(connectionString);
 
-            //TestDeleteMultiple(dbContext);
-            TestLoadWhere(dbContext);
-            TestLoadMany(dbContext);
+            TestDeleteMultiple(dbContext);
+            //TestLoadWhere(dbContext);
+            //TestLoadMany(dbContext);
             //var addresses = dbContext.Addresses.ToList();
         }
 

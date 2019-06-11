@@ -148,57 +148,85 @@ namespace System.Data.Linq
 			List<TrackedObject> insertedItems = new List<TrackedObject>();
 			List<TrackedObject> syncDependentItems = new List<TrackedObject>();
 
-			foreach(TrackedObject item in list)
+			for(int i = 0; i < list.Count; i++)
 			{
 				try
 				{
-					if(item.IsNew)
+					if(list[i].IsNew)
 					{
-						if(item.SynchDependentData())
+						if(list[i].SynchDependentData())
 						{
-							syncDependentItems.Add(item);
+							syncDependentItems.Add(list[i]);
 						}
-						_changeDirector.Insert(item);
+						_changeDirector.Insert(list[i]);
 						// store all inserted items for post processing
-						insertedItems.Add(item);
+						insertedItems.Add(list[i]);
 					}
-					else if(item.IsDeleted)
+					else if(list[i].IsDeleted)
 					{
-						// Delete returns 1 if the delete was successfull, 0 if the row exists
-						// but wasn't deleted due to an OC conflict, or -1 if the row was
-						// deleted by another context (no OC conflict in this case)
-						numUpdatesAttempted++;
-						int ret = _changeDirector.Delete(item);
-						if(ret == 0)
-						{
-							conflicts.Add(new ObjectChangeConflict(conflictSession, item, false));
-						}
-						else
-						{
-							// store all deleted items for post processing
-							deletedItems.Add(item);
-						}
+                        var bulkDeleteList = new List<TrackedObject>();
+                        while(i<list.Count && list[i].IsDeleted)
+                        {
+                            bulkDeleteList.Add(list[i]);
+                            i++;
+                        }
+
+                        if (bulkDeleteList.Count == 1)
+                        {
+						    // Delete returns 1 if the delete was successfull, 0 if the row exists
+						    // but wasn't deleted due to an OC conflict, or -1 if the row was
+						    // deleted by another context (no OC conflict in this case)
+						    numUpdatesAttempted++;
+						    int ret = _changeDirector.Delete(list[i]);
+						    if(ret == 0)
+						    {
+							    conflicts.Add(new ObjectChangeConflict(conflictSession, list[i], false));
+						    }
+						    else
+						    {
+							    // store all deleted items for post processing
+							    deletedItems.Add(list[i]);
+						    }
+                        }
+                        else
+                        {
+                            // Delete returns 1 if the delete was successfull, 0 if the row exists
+                            // but wasn't deleted due to an OC conflict, or -1 if the row was
+                            // deleted by another context (no OC conflict in this case)
+                            numUpdatesAttempted++;
+                            int ret = _changeDirector.Delete(bulkDeleteList);
+                            if (ret == 0)
+                            {
+                                throw new NotImplementedException();
+                                //conflicts.Add(new ObjectChangeConflict(conflictSession, bulkDeleteList, false));
+                            }
+                            else
+                            {
+                                // store all deleted items for post processing
+                                deletedItems.AddRange(bulkDeleteList);
+                            }
+                        }
 					}
-					else if(item.IsPossiblyModified)
+					else if(list[i].IsPossiblyModified)
 					{
-						if(item.SynchDependentData())
+						if(list[i].SynchDependentData())
 						{
-							syncDependentItems.Add(item);
+							syncDependentItems.Add(list[i]);
 						}
-						if(item.IsModified)
+						if(list[i].IsModified)
 						{
-							CheckForInvalidChanges(item);
+							CheckForInvalidChanges(list[i]);
 							numUpdatesAttempted++;
-							if(_changeDirector.Update(item) <= 0)
+							if(_changeDirector.Update(list[i]) <= 0)
 							{
-								conflicts.Add(new ObjectChangeConflict(conflictSession, item));
+								conflicts.Add(new ObjectChangeConflict(conflictSession, list[i]));
 							}
 						}
 					}
 				}
 				catch(ChangeConflictException)
 				{
-					conflicts.Add(new ObjectChangeConflict(conflictSession, item));
+					conflicts.Add(new ObjectChangeConflict(conflictSession, list[i]));
 				}
 				if(conflicts.Count > 0 && failureMode == ConflictMode.FailOnFirstConflict)
 				{

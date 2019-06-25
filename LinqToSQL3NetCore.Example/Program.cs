@@ -79,5 +79,13 @@ namespace LinqToSQL3NetCore.Example
             dbContext.DeleteOnSubmit(testTable1);
             dbContext.SubmitChanges();
         }
+
+        static void TestLoadWith(DbContext dbContext)
+        {
+            var person = dbContext.Persons
+                .Where(p => p.FirstName == "SomeName")
+                .LoadWith(p => p.Addresses)
+                .ToList();
+        }
     }
 }

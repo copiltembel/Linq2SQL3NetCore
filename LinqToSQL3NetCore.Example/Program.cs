@@ -1,10 +1,10 @@
 ﻿using Db.DataAccess.DataSet;
 using LinqToSQL3NetCore.Example.DataAccess;
+using LinqToSQL3NetCore.QueryableExtensions;
 using Newtonsoft.Json;
 using System.Data.Linq;
 using System.IO;
 using System.Linq;
-
 namespace LinqToSQL3NetCore.Example
 {
     class Program
@@ -14,10 +14,10 @@ namespace LinqToSQL3NetCore.Example
             var connectionString = GetConnectionString("connectionstrings.json");
 
             DbContext dbContext = new DbContext(connectionString);
-
+            //TestWhere(dbContext);
             //TestDeleteMultiple(dbContext);
-            TestLoadWhere(dbContext);
-            TestLoadMany(dbContext);
+            TestLoadWith(dbContext);
+            //TestLoadMany(dbContext);
             //var addresses = dbContext.Addresses.ToList();
         }
 
@@ -82,9 +82,17 @@ namespace LinqToSQL3NetCore.Example
 
         static void TestLoadWith(DbContext dbContext)
         {
-            var person = dbContext.Persons
+            var person = dbContext.Addresses
+                .Where(a => a.City == "SomeCity")
+                .LoadWith(p => p.Country)
+                .ToList();
+        }
+
+        static void TestWhere(DbContext dbContext)
+        {
+            var persons = dbContext.Persons
                 .Where(p => p.FirstName == "SomeName")
-                .LoadWith(p => p.Addresses)
+                .OrderBy(p => p.LastName)
                 .ToList();
         }
     }

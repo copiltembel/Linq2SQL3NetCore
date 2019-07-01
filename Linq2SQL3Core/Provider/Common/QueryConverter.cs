@@ -522,7 +522,34 @@ Expression.ArrayIndex(pa, Expression.Constant(i)),
 			}
 		}
 
-		private SqlSelect VisitSelectMany(Expression sequence, LambdaExpression colSelector, LambdaExpression resultSelector)
+        private SqlSelect VisitLoadWith(Expression sequence, LambdaExpression expression)
+        {
+            if (IsGrouping(expression.Body.Type))
+            {
+                throw Error.GroupingNotSupportedAsOrderCriterion();
+            }
+            if (!_typeProvider.From(expression.Body.Type).IsOrderable)
+            {
+                throw Error.TypeCannotBeOrdered(expression.Body.Type);
+            }
+
+            SqlSelect select = this.LockSelect(this.VisitSequence(sequence));
+
+            if (select.Selection.NodeType != SqlNodeType.AliasRef || select.LoadWith.Count > 0)
+            {
+                SqlAlias alias = new SqlAlias(select);
+                SqlAliasRef aref = new SqlAliasRef(alias);
+                select = new SqlSelect(aref, alias, _dominatingExpression);
+            }
+
+            _parameterExpressionToSqlExpression[expression.Parameters[0]] = (SqlAliasRef)select.Selection;
+            SqlExpression expr = this.VisitExpression(expression.Body);
+
+            select.LoadWith.Add(new SqlLoadWithExpression(expr));
+            return select;
+        }
+
+        private SqlSelect VisitSelectMany(Expression sequence, LambdaExpression colSelector, LambdaExpression resultSelector)
 		{
 			SqlSelect seqSelect = this.VisitSequence(sequence);
 			SqlAlias seqAlias = new SqlAlias(seqSelect);
@@ -2306,8 +2333,10 @@ Expression.ArrayIndex(cpArray.Accessor.Body, Expression.Constant(vIndex.Value, v
 		private bool IsSequenceOperatorCall(MethodCallExpression mc)
 		{
 			Type declType = mc.Method.DeclaringType;
-			if(declType == typeof(System.Linq.Enumerable) ||
-				declType == typeof(System.Linq.Queryable))
+			if(declType == typeof(System.Linq.Enumerable) 
+                || declType == typeof(System.Linq.Queryable) 
+                || declType == typeof(LinqToSQL3NetCore.QueryableExtensions.IQueryableExtensions)
+                ) 
 			{
 				return true;
 			}
@@ -2333,7 +2362,16 @@ Expression.ArrayIndex(cpArray.Accessor.Body, Expression.Constant(vIndex.Value, v
 			{
 				switch(mc.Method.Name)
 				{
-					case "Select":
+                    case "LoadWith":
+                        isSupportedSequenceOperator = true;
+                        if (mc.Arguments.Count == 2 &&
+                            this.IsLambda(mc.Arguments[1]) && this.GetLambda(mc.Arguments[1]).Parameters.Count == 1)
+                        {
+                            return this.VisitSelect(mc.Arguments[0], this.GetLambda(mc.Arguments[1]));
+                        }
+                        break;
+
+                    case "Select":
 						isSupportedSequenceOperator = true;
 						if(mc.Arguments.Count == 2 &&
 							this.IsLambda(mc.Arguments[1]) && this.GetLambda(mc.Arguments[1]).Parameters.Count == 1)

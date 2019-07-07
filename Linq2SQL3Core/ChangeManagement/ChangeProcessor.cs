@@ -152,17 +152,37 @@ namespace System.Data.Linq
 			{
 				try
 				{
-					if(list[i].IsNew)
+#if BULK_INSERT
+                    if(list[i].IsNew)
 					{
-						if(list[i].SynchDependentData())
-						{
-							syncDependentItems.Add(list[i]);
-						}
-						_changeDirector.Insert(list[i]);
+                        var bulkInsertList = new List<TrackedObject>();
+                        while (i < list.Count && list[i].IsNew)
+                        {
+                            bulkInsertList.Add(list[i]);
+
+                            if (list[i].SynchDependentData())
+                            {
+                                syncDependentItems.Add(list[i]);
+                            }
+                            i++;
+                        }
+						_changeDirector.Insert(bulkInsertList);
 						// store all inserted items for post processing
-						insertedItems.Add(list[i]);
+						insertedItems.AddRange(bulkInsertList);
 					}
-					else if(list[i].IsDeleted)
+#else
+                    if (list[i].IsNew)
+                    {
+                        if (list[i].SynchDependentData())
+                        {
+                            syncDependentItems.Add(list[i]);
+                        }
+                        _changeDirector.Insert(list[i]);
+                        // store all inserted items for post processing
+                        insertedItems.Add(list[i]);
+                    }
+#endif
+                    else if(list[i].IsDeleted)
 					{
                         var bulkDeleteList = new List<TrackedObject>();
                         while(i<list.Count && list[i].IsDeleted)

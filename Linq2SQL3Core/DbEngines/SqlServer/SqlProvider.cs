@@ -1249,118 +1249,129 @@ namespace System.Data.Linq.DbEngines.SqlServer
                 cmd.CommandText = GetCommandTexts(queryInfos);
                 cmd.Transaction = _conManager.Transaction;
                 cmd.CommandTimeout = _commandTimeout;
-                ReadOnlyCollection<SqlParameterInfo> parameters = new ReadOnlyCollection<SqlParameterInfo>(queryInfos.SelectMany(qi => qi.Parameters).ToList());
+                var parameters = new ReadOnlyCollection<SqlParameterInfo>(queryInfos.SelectMany(qi => qi.Parameters).ToList());
                 AssignParameters(cmd, parameters, userArgs, lastResult);
                 LogCommand(_log, cmd);
                 _queryCount += 1;
 
-                switch (queryInfos.Select(qi => qi.ResultShape).ToHashSet().Single())
+                var resultShape = queryInfos.Select(qi => qi.ResultShape).ToHashSet().Single();
+                var resultType = queryInfos.Select(qi => qi.ResultType).ToHashSet().Single();
+                switch (resultShape)
                 {
                     default:
                     case ResultShape.Return:
                         {
                             return new ExecuteResult(cmd, parameters, null, cmd.ExecuteNonQuery(), true);
                         }
-                        //case ResultShape.Singleton:
-                        //    {
-                        //        DbDataReader reader = cmd.ExecuteReader();
-                        //        IObjectReader objReader = factory.Create(reader, true, this, parentArgs, userArgs, subQueries);
-                        //        _conManager.UseConnection(objReader.Session);
-                        //        try
-                        //        {
-                        //            IEnumerable sequence = (IEnumerable)Activator.CreateInstance(
-                        //                typeof(OneTimeEnumerable<>).MakeGenericType(queryInfos.ResultType),
-                        //                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
-                        //                new object[] { objReader }, null
-                        //                );
-                        //            object value = null;
-                        //            MethodCallExpression mce = queries as MethodCallExpression;
-                        //            MethodInfo sequenceMethod = null;
-                        //            if (mce != null && (
-                        //                mce.Method.DeclaringType == typeof(Queryable) ||
-                        //                mce.Method.DeclaringType == typeof(Enumerable))
-                        //                )
-                        //            {
-                        //                switch (mce.Method.Name)
-                        //                {
-                        //                    case "First":
-                        //                    case "FirstOrDefault":
-                        //                    case "SingleOrDefault":
-                        //                        sequenceMethod = TypeSystem.FindSequenceMethod(mce.Method.Name, sequence);
-                        //                        break;
-                        //                    case "Single":
-                        //                    default:
-                        //                        sequenceMethod = TypeSystem.FindSequenceMethod("Single", sequence);
-                        //                        break;
-                        //                }
-                        //            }
-                        //            else
-                        //            {
-                        //                sequenceMethod = TypeSystem.FindSequenceMethod("SingleOrDefault", sequence);
-                        //            }
+                    case ResultShape.Singleton:
+                        {
+                            throw new NotImplementedException();
+                            //DbDataReader reader = cmd.ExecuteReader();
+                            //IObjectReader objReader = factory.Create(reader, true, this, parentArgs, userArgs, subQueries);
+                            //_conManager.UseConnection(objReader.Session);
+                            //try
+                            //{
+                            //    IEnumerable sequence = (IEnumerable)Activator.CreateInstance(
+                            //        typeof(OneTimeEnumerable<>).MakeGenericType(queryInfos.ResultType),
+                            //        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
+                            //        new object[] { objReader }, null
+                            //        );
+                            //    object value = null;
+                            //    MethodCallExpression mce = queries as MethodCallExpression;
+                            //    MethodInfo sequenceMethod = null;
+                            //    if (mce != null && (
+                            //        mce.Method.DeclaringType == typeof(Queryable) ||
+                            //        mce.Method.DeclaringType == typeof(Enumerable))
+                            //        )
+                            //    {
+                            //        switch (mce.Method.Name)
+                            //        {
+                            //            case "First":
+                            //            case "FirstOrDefault":
+                            //            case "SingleOrDefault":
+                            //                sequenceMethod = TypeSystem.FindSequenceMethod(mce.Method.Name, sequence);
+                            //                break;
+                            //            case "Single":
+                            //            default:
+                            //                sequenceMethod = TypeSystem.FindSequenceMethod("Single", sequence);
+                            //                break;
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        sequenceMethod = TypeSystem.FindSequenceMethod("SingleOrDefault", sequence);
+                            //    }
 
-                        //            // When dynamically invoking the sequence method, we want to
-                        //            // return the inner exception if the invocation fails
-                        //            if (sequenceMethod != null)
-                        //            {
-                        //                try
-                        //                {
-                        //                    value = sequenceMethod.Invoke(null, new object[] { sequence });
-                        //                }
-                        //                catch (TargetInvocationException tie)
-                        //                {
-                        //                    if (tie.InnerException != null)
-                        //                    {
-                        //                        throw tie.InnerException;
-                        //                    }
-                        //                    throw;
-                        //                }
-                        //            }
+                            //    // When dynamically invoking the sequence method, we want to
+                            //    // return the inner exception if the invocation fails
+                            //    if (sequenceMethod != null)
+                            //    {
+                            //        try
+                            //        {
+                            //            value = sequenceMethod.Invoke(null, new object[] { sequence });
+                            //        }
+                            //        catch (TargetInvocationException tie)
+                            //        {
+                            //            if (tie.InnerException != null)
+                            //            {
+                            //                throw tie.InnerException;
+                            //            }
+                            //            throw;
+                            //        }
+                            //    }
 
-                        //            return new ExecuteResult(cmd, queryInfos.Parameters, objReader.Session, value);
-                        //        }
-                        //        finally
-                        //        {
-                        //            objReader.Dispose();
-                        //        }
-                        //    }
-                        //case ResultShape.Sequence:
-                        //    {
-                        //        DbDataReader reader = cmd.ExecuteReader();
-                        //        IObjectReader objReader = factory.Create(reader, true, this, parentArgs, userArgs, subQueries);
-                        //        _conManager.UseConnection(objReader.Session);
-                        //        IEnumerable sequence = (IEnumerable)Activator.CreateInstance(
-                        //            typeof(OneTimeEnumerable<>).MakeGenericType(TypeSystem.GetElementType(queryInfos.ResultType)),
-                        //            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
-                        //            new object[] { objReader }, null
-                        //            );
-                        //        if (typeof(IQueryable).IsAssignableFrom(queryInfos.ResultType))
-                        //        {
-                        //            sequence = sequence.AsQueryable();
-                        //        }
-                        //        ExecuteResult result = new ExecuteResult(cmd, queryInfos.Parameters, objReader.Session);
-                        //        MetaFunction function = this.GetFunction(queries);
-                        //        if (function != null && !function.IsComposable)
-                        //        {
-                        //            sequence = (IEnumerable)Activator.CreateInstance(
-                        //            typeof(SingleResult<>).MakeGenericType(TypeSystem.GetElementType(queryInfos.ResultType)),
-                        //            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
-                        //            new object[] { sequence, result, _services.Context }, null
-                        //            );
-                        //        }
-                        //        result.ReturnValue = sequence;
-                        //        return result;
-                        //    }
-                        //case ResultShape.MultipleResults:
-                        //    {
-                        //        DbDataReader reader = cmd.ExecuteReader();
-                        //        IObjectReaderSession session = _readerCompiler.CreateSession(reader, this, parentArgs, userArgs, subQueries);
-                        //        _conManager.UseConnection(session);
-                        //        MetaFunction function = this.GetFunction(queries);
-                        //        ExecuteResult result = new ExecuteResult(cmd, queryInfos.Parameters, session);
-                        //        result.ReturnValue = new MultipleResults(this, function, session, result);
-                        //        return result;
-                        //    }
+                            //    return new ExecuteResult(cmd, queryInfos.Parameters, objReader.Session, value);
+                            //}
+                            //finally
+                            //{
+                            //    objReader.Dispose();
+                            //}
+                        }
+                    case ResultShape.Sequence:
+                        {
+                            //throw new NotImplementedException();
+
+                            DbDataReader reader = cmd.ExecuteReader();
+                            IObjectReader objReader = factory.Create(reader, true, this, parentArgs, userArgs, subQueries);
+                            _conManager.UseConnection(objReader.Session);
+                            IEnumerable sequence = (IEnumerable)Activator.CreateInstance(
+                                typeof(OneTimeEnumerable<>).MakeGenericType(TypeSystem.GetElementType(resultType)),
+                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
+                                new object[] { objReader }, null
+                                );
+                            if (typeof(IQueryable).IsAssignableFrom(resultType))
+                            {
+                                sequence = sequence.AsQueryable();
+                            }
+
+                            ExecuteResult result = new ExecuteResult(cmd, parameters, objReader.Session);
+                            foreach (var query in queries)
+                            {
+                                MetaFunction function = this.GetFunction(query);
+                                if (function != null && !function.IsComposable)
+                                {
+                                    sequence = (IEnumerable)Activator.CreateInstance(
+                                    typeof(SingleResult<>).MakeGenericType(TypeSystem.GetElementType(resultType)),
+                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,
+                                    new object[] { sequence, result, _services.Context }, null
+                                    );
+                                }
+                            }
+                            result.ReturnValue = sequence;
+                            return result;
+                        }
+                    case ResultShape.MultipleResults:
+                        {
+                            throw new NotImplementedException();
+
+                            //DbDataReader reader = cmd.ExecuteReader();
+                            //IObjectReaderSession session = _readerCompiler.CreateSession(reader, this, parentArgs, userArgs, subQueries);
+                            //_conManager.UseConnection(session);
+                            //MetaFunction function = this.GetFunction(queries);
+                            //ExecuteResult result = new ExecuteResult(cmd, queryInfos.Parameters, session);
+                            //result.ReturnValue = new MultipleResults(this, function, session, result);
+                            //return result;
+                        }
                 }
             }
             finally

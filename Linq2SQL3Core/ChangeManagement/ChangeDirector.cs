@@ -19,7 +19,9 @@ namespace System.Data.Linq {
     /// </summary>
     internal abstract class ChangeDirector {
         internal abstract int Insert(TrackedObject item);
+        internal abstract int Insert(IReadOnlyList<TrackedObject> items);
         internal abstract int DynamicInsert(TrackedObject item);
+        internal abstract int DynamicInsert(IReadOnlyList<TrackedObject> items);
         internal abstract void AppendInsertText(TrackedObject item, StringBuilder appendTo);
 
         internal abstract int Update(TrackedObject item);

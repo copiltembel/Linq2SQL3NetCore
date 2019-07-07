@@ -44,6 +44,11 @@ namespace System.Data.Linq
             }
         }
 
+        internal override int Insert(IReadOnlyList<TrackedObject> items)
+        {
+            return DynamicInsert(items);
+        }
+
         internal override int Insert(TrackedObject item)
         {
             if (item.Type.Table.InsertMethod != null)
@@ -88,6 +93,36 @@ namespace System.Data.Linq
                 else
                 {
                     throw Error.InsertAutoSyncFailure();
+                }
+            }
+        }
+
+        internal override int DynamicInsert(IReadOnlyList<TrackedObject> items)
+        {
+            var cmds = new List<Expression>(capacity: items.Count);
+            foreach (var item in items)
+            {
+                cmds.Add(this.GetInsertCommand(item));
+            }
+
+            if (cmds.Any(c => c.Type == typeof(int)))
+            {
+                throw new NotImplementedException();
+                //return (int)this._context.Provider.Execute(cmd).ReturnValue;
+            }
+            else
+            {
+                IEnumerable<object[]> facts = (IEnumerable<object[]>)this._context.Provider.Execute(cmds).ReturnValue;
+                if (facts == null || facts.Count() < 1)
+                {
+                    throw Error.InsertAutoSyncFailure();
+                }
+                else
+                {
+                    var syncResults = facts.ToList();
+                    // [....] any auto gen or computed members
+                    AutoSyncMembers(syncResults, items, UpdateType.Insert, AutoSyncBehavior.ApplyNewAutoSync);
+                    return syncResults.Count;
                 }
             }
         }
@@ -324,6 +359,18 @@ namespace System.Data.Linq
                 }
             }
             return membersToSync;
+        }
+
+        private void AutoSyncMembers(IReadOnlyList<object[]> syncResults, IReadOnlyList<TrackedObject> items, UpdateType updateType, AutoSyncBehavior autoSyncBehavior)
+        {
+            if (syncResults.Count != items.Count)
+            {
+                throw new InvalidOperationException();
+            }
+            for(int i = 0; i<items.Count; i++)
+            {
+                AutoSyncMembers(syncResults[i], items[i], updateType, autoSyncBehavior);
+            }
         }
 
         /// <summary>

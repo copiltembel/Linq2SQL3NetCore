@@ -1,4 +1,4 @@
-set dbName=L2S
+set dbName=UserOrderItems
 
 sqlmetal /server:localhost /database:%dbName% /sprocs /timeout:30 /dbml:DataAccess.dbml /context:DbDataContext /namespace:Db.DataAccess.DataSet /entitybase:DbEntity /pluralize /serialization:Unidirectional
 

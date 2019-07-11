@@ -18,7 +18,6 @@ namespace System.Data.Linq
 		/// Default.
 		/// </summary>
 		Sql2008,
-		SqlCE,
 		Sql2012,
 		Sql2014,
 		// Add more here.

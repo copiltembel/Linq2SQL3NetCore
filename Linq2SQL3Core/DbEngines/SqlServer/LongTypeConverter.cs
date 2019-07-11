@@ -91,7 +91,7 @@ namespace System.Data.Linq.DbEngines.SqlServer
 					if(containsLongExpressions)
 					{
 						this.annotations.Add(select, new CompatibilityAnnotation(
-											 Strings.TextNTextAndImageCannotOccurInDistinct(select.SourceExpression), SqlServerProviderMode.Sql2000, SqlServerProviderMode.SqlCE));
+											 Strings.TextNTextAndImageCannotOccurInDistinct(select.SourceExpression), SqlServerProviderMode.Sql2000));
 					}
 
 				}
@@ -119,7 +119,7 @@ namespace System.Data.Linq.DbEngines.SqlServer
 					// unless the UNION is 'ALL', the server will perform a DISTINCT operation,
 					// which isn't valid for large types (text, ntext, image)
 					this.annotations.Add(su, new CompatibilityAnnotation(
-						Strings.TextNTextAndImageCannotOccurInUnion(su.SourceExpression), SqlServerProviderMode.Sql2000, SqlServerProviderMode.SqlCE));
+						Strings.TextNTextAndImageCannotOccurInUnion(su.SourceExpression), SqlServerProviderMode.Sql2000));
 				}
 				return base.VisitUnion(su);
 			}

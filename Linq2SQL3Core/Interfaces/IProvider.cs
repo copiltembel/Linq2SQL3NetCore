@@ -97,12 +97,12 @@ namespace System.Data.Linq {
 		/// Executes all queries
 		/// </summary>
 		/// <param name="query">The query.</param>
-		/// <param name="queryInfos">The query infos.</param>
+		/// <param name="queryInfo">The query info.</param>
 		/// <param name="factory">The factory.</param>
 		/// <param name="userArguments">The user arguments.</param>
 		/// <param name="subQueries">The sub queries.</param>
 		/// <returns></returns>
-	    IExecuteResult ExecuteAll(Expression query, QueryInfo[] queryInfos, IObjectReaderFactory factory, object[] userArguments, ICompiledSubQuery[] subQueries);
+	    IExecuteResult ExecuteAll(Expression query, QueryInfo queryInfo, IObjectReaderFactory factory, object[] userArguments, ICompiledSubQuery[] subQueries);
 		
         /// <summary>
         /// Compiles the query specified as a LINQ expression tree.

@@ -1,5 +1,6 @@
 {
   "DbConnectionStrings": {
-    "Db1": "data source=localhost;User=myuser;Password=apassword;Initial Catalog=L2S;User Instance=false;"
+    "Db1": "data source=localhost;User=myuser;Password=apassword;Initial Catalog=L2S;User Instance=false;",
+    "Db2": "data source=localhost;User=myuser;Password=apassword;Initial Catalog=UserOrderItems;User Instance=false;"
   }
 }

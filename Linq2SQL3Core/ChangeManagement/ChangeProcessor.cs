@@ -193,11 +193,12 @@ namespace System.Data.Linq
 
                         if (bulkDeleteList.Count == 1)
                         {
-						    // Delete returns 1 if the delete was successfull, 0 if the row exists
-						    // but wasn't deleted due to an OC conflict, or -1 if the row was
-						    // deleted by another context (no OC conflict in this case)
-						    numUpdatesAttempted++;
-						    int ret = _changeDirector.Delete(list[i]);
+                            var entityToDelete = bulkDeleteList.Single();
+                            // Delete returns 1 if the delete was successfull, 0 if the row exists
+                            // but wasn't deleted due to an OC conflict, or -1 if the row was
+                            // deleted by another context (no OC conflict in this case)
+                            numUpdatesAttempted++;
+						    int ret = _changeDirector.Delete(entityToDelete);
 						    if(ret == 0)
 						    {
 							    conflicts.Add(new ObjectChangeConflict(conflictSession, list[i], false));
@@ -205,7 +206,7 @@ namespace System.Data.Linq
 						    else
 						    {
 							    // store all deleted items for post processing
-							    deletedItems.Add(list[i]);
+							    deletedItems.Add(entityToDelete);
 						    }
                         }
                         else

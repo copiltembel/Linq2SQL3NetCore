@@ -1,9 +1,7 @@
 ﻿using Db.DataAccess.DataSet;
-using LinqToSQL3.Example.DataAccess;
 using LinqToSQL3NetCore.Example.DataAccess;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace LinqToSQL3NetCore.Example
@@ -110,6 +108,21 @@ namespace LinqToSQL3NetCore.Example
             dbContext.DeleteAllOnSubmit(insertUserOrderItems.Orders);
             dbContext.DeleteAllOnSubmit(insertUserOrderItems.Orders.SelectMany(o => o.Items));
             dbContext.SubmitChanges();
+        }
+
+        public void RunTest3(int entityCount = 10000)
+        {
+            var list = new List<User>(capacity: entityCount);
+            for (int i = 0; i < entityCount; i++)
+            {
+                var user = CreateUser();
+                dbContext.InsertOnSubmit(user);
+                list.Add(user);
+            }
+            dbContext.SubmitChanges();
+
+            //dbContext.DeleteAllOnSubmit(list);
+            //dbContext.SubmitChanges();
         }
     }
 }

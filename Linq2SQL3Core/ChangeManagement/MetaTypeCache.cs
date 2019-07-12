@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace LinqToSQL3NetCore.ChangeManagement
 {
-    public class MetaTypeCache
+    public static class MetaTypeCache
     {
-        static Dictionary<StandardChangeDirector.UpdateType, ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>> MetaDicByUpdateType = 
-            new Dictionary<StandardChangeDirector.UpdateType, ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>>(capacity: 2);
+        static Dictionary<StandardChangeDirector.UpdateType, ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>> MetaDicByUpdateType;
 
         static MetaTypeCache()
         {
+            MetaDicByUpdateType = new Dictionary<StandardChangeDirector.UpdateType, ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>>(capacity: 2);
             var insertDic = new ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>();
             var updateDic = new ConcurrentDictionary<MetaType, IReadOnlyList<MetaDataMember>>();
             MetaDicByUpdateType.Add(StandardChangeDirector.UpdateType.Insert, insertDic);

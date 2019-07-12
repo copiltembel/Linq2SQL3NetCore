@@ -301,7 +301,7 @@ namespace System.Data.Linq
             {
                 return result;
             }
-			var membersToSync = new List<MetaDataMember>();
+            var membersToSync = new List<MetaDataMember>();
 			foreach(MetaDataMember metaMember in metaType.PersistentDataMembers.OrderBy(m => m.Ordinal))
 			{
 				// add all auto generated members for the specified update type to the auto-[....] list
@@ -313,7 +313,7 @@ namespace System.Data.Linq
 				}
 			}
             MetaTypeCache.TrySetMetaDataMembers(updateType, metaType, membersToSync);
-			return membersToSync;
+            return membersToSync;
 		}
 
 		/// <summary>

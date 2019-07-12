@@ -21,7 +21,7 @@ namespace LinqToSQL3NetCore.Example
         private static void RunTest(DbContext dbContext)
         {
             var x = new TestInsertUpdateDelete(dbContext);
-            x.RunTest2();
+            x.RunTest3(entityCount: 10000);
         }
 
         static string GetConnectionString(string jsonFileName)

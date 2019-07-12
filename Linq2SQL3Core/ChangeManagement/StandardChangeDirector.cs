@@ -13,16 +13,17 @@ namespace System.Data.Linq
 	using System.Data.Linq.Mapping;
 	using Linq;
 	using System.Diagnostics.CodeAnalysis;
+    using LinqToSQL3NetCore.ChangeManagement;
 
-	/// <summary>
-	/// Implementation of ChangeDirector which calls user code if possible 
-	/// and othewise falls back to creating SQL for 'INSERT', 'UPDATE' and 'DELETE'.
-	/// </summary>
-	internal class StandardChangeDirector : ChangeDirector
+    /// <summary>
+    /// Implementation of ChangeDirector which calls user code if possible 
+    /// and othewise falls back to creating SQL for 'INSERT', 'UPDATE' and 'DELETE'.
+    /// </summary>
+    internal class StandardChangeDirector : ChangeDirector
 	{
 		#region Enums
-		private enum UpdateType { Insert, Update, Delete };
-		private enum AutoSyncBehavior { ApplyNewAutoSync, RollbackSavedValues }
+		internal enum UpdateType { Insert, Update, Delete };
+		internal enum AutoSyncBehavior { ApplyNewAutoSync, RollbackSavedValues }
 		#endregion
 
 		#region Member Declarations
@@ -49,7 +50,9 @@ namespace System.Data.Linq
 			}
 		}
 
-		internal override int Insert(TrackedObject item)
+        public static bool MetTypeCache { get; private set; }
+
+        internal override int Insert(TrackedObject item)
 		{
 			if(item.Type.Table.InsertMethod != null)
 			{
@@ -262,7 +265,7 @@ namespace System.Data.Linq
 			MetaType mt = item.Type;
 
 			// bind to InsertFacts if there are any members to syncronize
-			List<MetaDataMember> membersToSync = GetAutoSyncMembers(mt, UpdateType.Insert);
+			var membersToSync = GetAutoSyncMembers(mt, UpdateType.Insert);
 			ParameterExpression p = Expression.Parameter(item.Type.Table.RowType.Type, "p");
 			if(membersToSync.Count > 0)
 			{
@@ -280,7 +283,7 @@ namespace System.Data.Linq
 		/// For the meta members specified, create an array initializer for each and bind to
 		/// an output array.
 		/// </summary>
-		private Expression CreateAutoSync(List<MetaDataMember> membersToSync, Expression source)
+		private Expression CreateAutoSync(IReadOnlyList<MetaDataMember> membersToSync, Expression source)
 		{
 			System.Diagnostics.Debug.Assert(membersToSync.Count > 0);
 			int i = 0;
@@ -292,9 +295,13 @@ namespace System.Data.Linq
 			return Expression.NewArrayInit(typeof(object), initializers);
 		}
 
-		private static List<MetaDataMember> GetAutoSyncMembers(MetaType metaType, UpdateType updateType)
+		private static IReadOnlyList<MetaDataMember> GetAutoSyncMembers(MetaType metaType, UpdateType updateType)
 		{
-			List<MetaDataMember> membersToSync = new List<MetaDataMember>();
+            if (MetaTypeCache.TryGetMetaDataMembers(updateType, metaType, out var result))
+            {
+                return result;
+            }
+            var membersToSync = new List<MetaDataMember>();
 			foreach(MetaDataMember metaMember in metaType.PersistentDataMembers.OrderBy(m => m.Ordinal))
 			{
 				// add all auto generated members for the specified update type to the auto-[....] list
@@ -305,7 +312,8 @@ namespace System.Data.Linq
 					membersToSync.Add(metaMember);
 				}
 			}
-			return membersToSync;
+            MetaTypeCache.TrySetMetaDataMembers(updateType, metaType, membersToSync);
+            return membersToSync;
 		}
 
 		/// <summary>
@@ -326,7 +334,7 @@ namespace System.Data.Linq
 			if(syncResults != null)
 			{
 				int idx = 0;
-				List<MetaDataMember> membersToSync = GetAutoSyncMembers(item.Type, updateType);
+				var membersToSync = GetAutoSyncMembers(item.Type, updateType);
 				System.Diagnostics.Debug.Assert(syncResults.Length == membersToSync.Count);
 				if(autoSyncBehavior == AutoSyncBehavior.ApplyNewAutoSync)
 				{
@@ -375,7 +383,7 @@ namespace System.Data.Linq
 			}
 
 			// bind to out array if there are any members to synchronize
-			List<MetaDataMember> membersToSync = GetAutoSyncMembers(rowType, UpdateType.Update);
+			var membersToSync = GetAutoSyncMembers(rowType, UpdateType.Update);
 			if(membersToSync.Count > 0)
 			{
 				Expression autoSync = this.CreateAutoSync(membersToSync, pv);

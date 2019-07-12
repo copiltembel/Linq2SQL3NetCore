@@ -18,7 +18,7 @@ namespace Db.DataAccess.DataSet
         using System.Runtime.Serialization;
     
    //Warning: Avoid using an existing table name for the database name
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name=@"L2S")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name=@"UserOrderItems")]
 	public partial class DbDataContext : System.Data.Linq.DataContext
 	{
 		private static MappingSource mappingSource = new AttributeMappingSource();
@@ -26,33 +26,15 @@ namespace Db.DataAccess.DataSet
 		#region Extensibility Method Definitions
 
 		partial void OnCreated();
-		partial void InsertAddress(Address instance);
-		partial void UpdateAddress(Address instance);
-		partial void DeleteAddress(Address instance);
-		partial void InsertCountry(Country instance);
-		partial void UpdateCountry(Country instance);
-		partial void DeleteCountry(Country instance);
 		partial void InsertItem(Item instance);
 		partial void UpdateItem(Item instance);
 		partial void DeleteItem(Item instance);
 		partial void InsertOrder(Order instance);
 		partial void UpdateOrder(Order instance);
 		partial void DeleteOrder(Order instance);
-		partial void InsertPerson(Person instance);
-		partial void UpdatePerson(Person instance);
-		partial void DeletePerson(Person instance);
-		partial void InsertTestTable1(TestTable1 instance);
-		partial void UpdateTestTable1(TestTable1 instance);
-		partial void DeleteTestTable1(TestTable1 instance);
-		partial void InsertTestTable2(TestTable2 instance);
-		partial void UpdateTestTable2(TestTable2 instance);
-		partial void DeleteTestTable2(TestTable2 instance);
-		partial void InsertTestTable3(TestTable3 instance);
-		partial void UpdateTestTable3(TestTable3 instance);
-		partial void DeleteTestTable3(TestTable3 instance);
-		partial void InsertTestTable4(TestTable4 instance);
-		partial void UpdateTestTable4(TestTable4 instance);
-		partial void DeleteTestTable4(TestTable4 instance);
+		partial void InsertUser(User instance);
+		partial void UpdateUser(User instance);
+		partial void DeleteUser(User instance);
 		#endregion
 		
 		#region Construction
@@ -83,22 +65,6 @@ namespace Db.DataAccess.DataSet
 		#endregion
 		
 		#region Tables
-		public System.Data.Linq.Table<Address> Addresses
-		{
-			get 
-            { 
-                return this.GetTable<Address>(); 
-            }
-		}
-		
-		public System.Data.Linq.Table<Country> Countries
-		{
-			get 
-            { 
-                return this.GetTable<Country>(); 
-            }
-		}
-		
 		public System.Data.Linq.Table<Item> Items
 		{
 			get 
@@ -115,43 +81,11 @@ namespace Db.DataAccess.DataSet
             }
 		}
 		
-		public System.Data.Linq.Table<Person> Persons
+		public System.Data.Linq.Table<User> Users
 		{
 			get 
             { 
-                return this.GetTable<Person>(); 
-            }
-		}
-		
-		public System.Data.Linq.Table<TestTable1> TestTable1s
-		{
-			get 
-            { 
-                return this.GetTable<TestTable1>(); 
-            }
-		}
-		
-		public System.Data.Linq.Table<TestTable2> TestTable2s
-		{
-			get 
-            { 
-                return this.GetTable<TestTable2>(); 
-            }
-		}
-		
-		public System.Data.Linq.Table<TestTable3> TestTable3s
-		{
-			get 
-            { 
-                return this.GetTable<TestTable3>(); 
-            }
-		}
-		
-		public System.Data.Linq.Table<TestTable4> TestTable4s
-		{
-			get 
-            { 
-                return this.GetTable<TestTable4>(); 
+                return this.GetTable<User>(); 
             }
 		}
 		
@@ -165,458 +99,25 @@ namespace Db.DataAccess.DataSet
     #region Start table generation
 [DataContract(IsReference=true)]
         
-    [Table(Name=@"dbo.Address")]	[KnownType(typeof(Address))]  
-    public partial class Address : DbEntity<Address,System.Int32>
-	{
-
-        private  DbId<Address, System.Int32>  _Id;
-        
-        private  string  _Street;
-        
-        private  string  _Number;
-        
-        private  string  _PostCode;
-        
-        private  string  _City;
-        
-        private  DbId<Country, System.Int32>  _CountryId;
-        
-        private  DbId<Person, System.Int32>  _PersonId;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnIdChanging( DbId<Address, System.Int32>  value);
-		partial void OnIdChanged();
-                partial void OnStreetChanging( string  value);
-		partial void OnStreetChanged();
-                partial void OnNumberChanging( string  value);
-		partial void OnNumberChanged();
-                partial void OnPostCodeChanging( string  value);
-		partial void OnPostCodeChanged();
-                partial void OnCityChanging( string  value);
-		partial void OnCityChanged();
-                partial void OnCountryIdChanging( DbId<Country, System.Int32>  value);
-		partial void OnCountryIdChanged();
-                partial void OnPersonIdChanging( DbId<Person, System.Int32>  value);
-		partial void OnPersonIdChanged();
-        		#endregion
-
-		#region Construction
-		public Address()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			this._Country = default(EntityRef<Country>); 
-			this._Person = default(EntityRef<Person>); 
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		[DataMember(Order=1)]
-        public   DbId<Address, System.Int32>  Id
-		{
-			get 
-            { 
-                return this._Id; 
-            }
-			set 
-            {
-				if ((this._Id != value)) 
-                {
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Street", DbType="NChar(50) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=2)]
-        public   string  Street
-		{
-			get 
-            { 
-                return this._Street; 
-            }
-			set 
-            {
-				if ((this._Street != value)) 
-                {
-					this.OnStreetChanging(value);
-					this.SendPropertyChanging();
-					this._Street = value;
-					this.SendPropertyChanged("Street");
-					this.OnStreetChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Number", DbType="NChar(20) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=3)]
-        public   string  Number
-		{
-			get 
-            { 
-                return this._Number; 
-            }
-			set 
-            {
-				if ((this._Number != value)) 
-                {
-					this.OnNumberChanging(value);
-					this.SendPropertyChanging();
-					this._Number = value;
-					this.SendPropertyChanged("Number");
-					this.OnNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PostCode", DbType="NChar(100) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=4)]
-        public   string  PostCode
-		{
-			get 
-            { 
-                return this._PostCode; 
-            }
-			set 
-            {
-				if ((this._PostCode != value)) 
-                {
-					this.OnPostCodeChanging(value);
-					this.SendPropertyChanging();
-					this._PostCode = value;
-					this.SendPropertyChanged("PostCode");
-					this.OnPostCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_City", DbType="NChar(40) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=5)]
-        public   string  City
-		{
-			get 
-            { 
-                return this._City; 
-            }
-			set 
-            {
-				if ((this._City != value)) 
-                {
-					this.OnCityChanging(value);
-					this.SendPropertyChanging();
-					this._City = value;
-					this.SendPropertyChanged("City");
-					this.OnCityChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CountryId", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=6)]
-        public   DbId<Country, System.Int32>  CountryId
-		{
-			get 
-            { 
-                return this._CountryId; 
-            }
-			set 
-            {
-				if ((this._CountryId != value)) 
-                {
-					if (this._Country.HasLoadedOrAssignedValue) 
-                    {
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCountryIdChanging(value);
-					this.SendPropertyChanging();
-					this._CountryId = value;
-					this.SendPropertyChanged("CountryId");
-					this.OnCountryIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PersonId", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=7)]
-        public   DbId<Person, System.Int32>  PersonId
-		{
-			get 
-            { 
-                return this._PersonId; 
-            }
-			set 
-            {
-				if ((this._PersonId != value)) 
-                {
-					if (this._Person.HasLoadedOrAssignedValue) 
-                    {
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnPersonIdChanging(value);
-					this.SendPropertyChanging();
-					this._PersonId = value;
-					this.SendPropertyChanged("PersonId");
-					this.OnPersonIdChanged();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Associations
-		private EntityRef<Country> _Country;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Country_Addresses", Storage="_Country", ThisKey="CountryId", OtherKey="Id", IsForeignKey=true)]
-		[DataMember(Order=8, EmitDefaultValue=false)]
-		public Country Country
-		{
-			get 
-            {
-				return this._Country.Entity;
-			}
-			set 
-            {
-				Country previousValue = this._Country.Entity;
-				if (((previousValue != value) 
-                            || (this._Country.HasLoadedOrAssignedValue == false))) 
-                {
-					this.SendPropertyChanging();
-					if ((previousValue != null)) 
-                    {
-						this._Country.Entity = null;
-						previousValue.Addresses.Remove(this);
-					}
-					this._Country.Entity = value;
-					if ((value != null)) 
-                    {
-						value.Addresses.Add(this);
-						this._CountryId = value.Id;
-					}
-					else 
-                    {
-						this._CountryId = default;
-					}
-					this.SendPropertyChanged("Country");
-				}
-			}
-		}
-
-		private EntityRef<Person> _Person;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Person_Addresses", Storage="_Person", ThisKey="PersonId", OtherKey="Id", IsForeignKey=true)]
-		[DataMember(Order=9, EmitDefaultValue=false)]
-		public Person Person
-		{
-			get 
-            {
-				return this._Person.Entity;
-			}
-			set 
-            {
-				Person previousValue = this._Person.Entity;
-				if (((previousValue != value) 
-                            || (this._Person.HasLoadedOrAssignedValue == false))) 
-                {
-					this.SendPropertyChanging();
-					if ((previousValue != null)) 
-                    {
-						this._Person.Entity = null;
-						previousValue.Addresses.Remove(this);
-					}
-					this._Person.Entity = value;
-					if ((value != null)) 
-                    {
-						value.Addresses.Add(this);
-						this._PersonId = value.Id;
-					}
-					else 
-                    {
-						this._PersonId = default;
-					}
-					this.SendPropertyChanged("Person");
-				}
-			}
-		}
-
-		#endregion
-		
-		#region Serialization
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
-    [Table(Name=@"dbo.Country")]	[KnownType(typeof(Country))]  
-    public partial class Country : DbEntity<Country,System.Int32>
-	{
-
-        private  DbId<Country, System.Int32>  _Id;
-        
-        private  string  _Name;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnIdChanging( DbId<Country, System.Int32>  value);
-		partial void OnIdChanged();
-                partial void OnNameChanging( string  value);
-		partial void OnNameChanged();
-        		#endregion
-
-		#region Construction
-		public Country()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			this._Addresses = new EntitySet<Address>(attach_Addresses, detach_Addresses);
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		[DataMember(Order=1)]
-        public   DbId<Country, System.Int32>  Id
-		{
-			get 
-            { 
-                return this._Id; 
-            }
-			set 
-            {
-				if ((this._Id != value)) 
-                {
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NChar(50) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=2)]
-        public   string  Name
-		{
-			get 
-            { 
-                return this._Name; 
-            }
-			set 
-            {
-				if ((this._Name != value)) 
-                {
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Associations
-		private EntitySet<Address> _Addresses;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Country_Addresses", Storage="_Addresses", ThisKey="Id", OtherKey="CountryId", DeleteRule="NO ACTION")]
-		[DataMember(Order=3, EmitDefaultValue=false)]
-		public EntitySet<Address> Addresses
-		{
-			get 
-            {
-				if (serializing && !_Addresses.HasLoadedOrAssignedValues) 
-                {
-					return null;
-				}
-				return _Addresses;
-			}
-			set 
-            {
-				_Addresses.Assign(value);
-			}
-		}
-
-		private void attach_Addresses(Address entity)
-		{
-			SendPropertyChanging();
-			entity.Country = this;
-		}
-		
-		private void detach_Addresses(Address entity)
-		{
-			SendPropertyChanging();
-			entity.Country = null;
-		}
-		
-		#endregion
-		
-		#region Serialization
-		private bool serializing;
-		
-		[OnSerializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerializing(StreamingContext context)
-		{
-			serializing = true;
-		}
-		
-		[OnSerialized()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerialized(StreamingContext context)
-		{
-			serializing = false;
-		}
-		
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
     [Table(Name=@"dbo.Item")]	[KnownType(typeof(Item))]  
-    public partial class Item : DbEntity<Item,System.Guid>
+    public partial class Item : DbEntity<Item,System.Int32>
 	{
 
-        private  DbId<Item, System.Guid>  _Id;
+        private  DbId<Item, System.Int32>  _Id;
         
-        private  string  _Name;
+        private  decimal  _Price;
         
-        private  DbId<Order, System.Guid>  _OrderId;
+        private  DbId<Order, System.Int32>  _OrderId;
         
         #region Extensibility Method Definitions
 		partial void OnLoaded();
 		partial void OnValidate(System.Data.Linq.ChangeAction action);
 		partial void OnCreated();
-         partial void OnIdChanging( DbId<Item, System.Guid>  value);
+         partial void OnIdChanging( DbId<Item, System.Int32>  value);
 		partial void OnIdChanged();
-                partial void OnNameChanging( string  value);
-		partial void OnNameChanged();
-                partial void OnOrderIdChanging( DbId<Order, System.Guid>  value);
+                partial void OnPriceChanging( decimal  value);
+		partial void OnPriceChanged();
+                partial void OnOrderIdChanging( DbId<Order, System.Int32>  value);
 		partial void OnOrderIdChanged();
         		#endregion
 
@@ -634,9 +135,9 @@ namespace Db.DataAccess.DataSet
 		#endregion
 
 		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		[DataMember(Order=1)]
-        public   DbId<Item, System.Guid>  Id
+        public   DbId<Item, System.Int32>  Id
 		{
 			get 
             { 
@@ -655,30 +156,30 @@ namespace Db.DataAccess.DataSet
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Decimal(6,2) NOT NULL", CanBeNull=false)]
 		[DataMember(Order=2)]
-        public   string  Name
+        public   decimal  Price
 		{
 			get 
             { 
-                return this._Name; 
+                return this._Price; 
             }
 			set 
             {
-				if ((this._Name != value)) 
+				if ((this._Price != value)) 
                 {
-					this.OnNameChanging(value);
+					this.OnPriceChanging(value);
 					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
+					this._Price = value;
+					this.SendPropertyChanged("Price");
+					this.OnPriceChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrderId", DbType="UniqueIdentifier NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OrderId", DbType="Int NOT NULL", CanBeNull=false)]
 		[DataMember(Order=3)]
-        public   DbId<Order, System.Guid>  OrderId
+        public   DbId<Order, System.Int32>  OrderId
 		{
 			get 
             { 
@@ -705,7 +206,7 @@ namespace Db.DataAccess.DataSet
 		
 		#region Associations
 		private EntityRef<Order> _Order;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Order_Items", Storage="_Order", ThisKey="OrderId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Item_Order", Storage="_Order", ThisKey="OrderId", OtherKey="Id", IsForeignKey=true)]
 		[DataMember(Order=4, EmitDefaultValue=false)]
 		public Order Order
 		{
@@ -754,25 +255,25 @@ namespace Db.DataAccess.DataSet
 [DataContract(IsReference=true)]
         
     [Table(Name=@"dbo.Order")]	[KnownType(typeof(Order))]  
-    public partial class Order : DbEntity<Order,System.Guid>
+    public partial class Order : DbEntity<Order,System.Int32>
 	{
 
-        private  DbId<Order, System.Guid>  _Id;
+        private  DbId<Order, System.Int32>  _Id;
         
-        private  System.DateTime  _InsertionDateTime;
+        private  System.DateTime  _InsertTimestamp;
         
-        private  DbId<Person, System.Int32>  _PersonId;
+        private  DbId<User, System.Int32>  _UserId;
         
         #region Extensibility Method Definitions
 		partial void OnLoaded();
 		partial void OnValidate(System.Data.Linq.ChangeAction action);
 		partial void OnCreated();
-         partial void OnIdChanging( DbId<Order, System.Guid>  value);
+         partial void OnIdChanging( DbId<Order, System.Int32>  value);
 		partial void OnIdChanged();
-                partial void OnInsertionDateTimeChanging( System.DateTime  value);
-		partial void OnInsertionDateTimeChanged();
-                partial void OnPersonIdChanging( DbId<Person, System.Int32>  value);
-		partial void OnPersonIdChanged();
+                partial void OnInsertTimestampChanging( System.DateTime  value);
+		partial void OnInsertTimestampChanged();
+                partial void OnUserIdChanging( DbId<User, System.Int32>  value);
+		partial void OnUserIdChanged();
         		#endregion
 
 		#region Construction
@@ -784,15 +285,15 @@ namespace Db.DataAccess.DataSet
 		private void Initialize()
 		{
 			this._Items = new EntitySet<Item>(attach_Items, detach_Items);
-			this._Person = default(EntityRef<Person>); 
+			this._User = default(EntityRef<User>); 
 			OnCreated();
 		}
 		#endregion
 
 		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		[DataMember(Order=1)]
-        public   DbId<Order, System.Guid>  Id
+        public   DbId<Order, System.Int32>  Id
 		{
 			get 
             { 
@@ -811,48 +312,48 @@ namespace Db.DataAccess.DataSet
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsertionDateTime", DbType="DateTime2(3) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InsertTimestamp", DbType="DateTime2(7) NOT NULL", CanBeNull=false)]
 		[DataMember(Order=2)]
-        public   System.DateTime  InsertionDateTime
+        public   System.DateTime  InsertTimestamp
 		{
 			get 
             { 
-                return this._InsertionDateTime; 
+                return this._InsertTimestamp; 
             }
 			set 
             {
-				if ((this._InsertionDateTime != value)) 
+				if ((this._InsertTimestamp != value)) 
                 {
-					this.OnInsertionDateTimeChanging(value);
+					this.OnInsertTimestampChanging(value);
 					this.SendPropertyChanging();
-					this._InsertionDateTime = value;
-					this.SendPropertyChanged("InsertionDateTime");
-					this.OnInsertionDateTimeChanged();
+					this._InsertTimestamp = value;
+					this.SendPropertyChanged("InsertTimestamp");
+					this.OnInsertTimestampChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PersonId", DbType="Int NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL", CanBeNull=false)]
 		[DataMember(Order=3)]
-        public   DbId<Person, System.Int32>  PersonId
+        public   DbId<User, System.Int32>  UserId
 		{
 			get 
             { 
-                return this._PersonId; 
+                return this._UserId; 
             }
 			set 
             {
-				if ((this._PersonId != value)) 
+				if ((this._UserId != value)) 
                 {
-					if (this._Person.HasLoadedOrAssignedValue) 
+					if (this._User.HasLoadedOrAssignedValue) 
                     {
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnPersonIdChanging(value);
+					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
-					this._PersonId = value;
-					this.SendPropertyChanged("PersonId");
-					this.OnPersonIdChanged();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
 				}
 			}
 		}
@@ -861,7 +362,7 @@ namespace Db.DataAccess.DataSet
 		
 		#region Associations
 		private EntitySet<Item> _Items;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Order_Items", Storage="_Items", ThisKey="Id", OtherKey="OrderId", DeleteRule="NO ACTION")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Item_Order", Storage="_Items", ThisKey="Id", OtherKey="OrderId", DeleteRule="NO ACTION")]
 		[DataMember(Order=4, EmitDefaultValue=false)]
 		public EntitySet<Item> Items
 		{
@@ -891,41 +392,41 @@ namespace Db.DataAccess.DataSet
 			entity.Order = null;
 		}
 		
-		private EntityRef<Person> _Person;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Person_Orders", Storage="_Person", ThisKey="PersonId", OtherKey="Id", IsForeignKey=true)]
+		private EntityRef<User> _User;
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Order_User", Storage="_User", ThisKey="UserId", OtherKey="Id", IsForeignKey=true)]
 		[DataMember(Order=5, EmitDefaultValue=false)]
-		public Person Person
+		public User User
 		{
 			get 
             {
-				if (serializing && !_Person.HasLoadedOrAssignedValue) {
+				if (serializing && !_User.HasLoadedOrAssignedValue) {
 					return null;
 				}
-				return this._Person.Entity;
+				return this._User.Entity;
 			}
 			set 
             {
-				Person previousValue = this._Person.Entity;
+				User previousValue = this._User.Entity;
 				if (((previousValue != value) 
-                            || (this._Person.HasLoadedOrAssignedValue == false))) 
+                            || (this._User.HasLoadedOrAssignedValue == false))) 
                 {
 					this.SendPropertyChanging();
 					if ((previousValue != null)) 
                     {
-						this._Person.Entity = null;
+						this._User.Entity = null;
 						previousValue.Orders.Remove(this);
 					}
-					this._Person.Entity = value;
+					this._User.Entity = value;
 					if ((value != null)) 
                     {
 						value.Orders.Add(this);
-						this._PersonId = value.Id;
+						this._UserId = value.Id;
 					}
 					else 
                     {
-						this._PersonId = default;
+						this._UserId = default;
 					}
-					this.SendPropertyChanged("Person");
+					this.SendPropertyChanged("User");
 				}
 			}
 		}
@@ -959,11 +460,11 @@ namespace Db.DataAccess.DataSet
 	}
 [DataContract(IsReference=true)]
         
-    [Table(Name=@"dbo.Person")]	[KnownType(typeof(Person))]  
-    public partial class Person : DbEntity<Person,System.Int32>
+    [Table(Name=@"dbo.User")]	[KnownType(typeof(User))]  
+    public partial class User : DbEntity<User,System.Int32>
 	{
 
-        private  DbId<Person, System.Int32>  _Id;
+        private  DbId<User, System.Int32>  _Id;
         
         private  string  _FirstName;
         
@@ -975,7 +476,7 @@ namespace Db.DataAccess.DataSet
 		partial void OnLoaded();
 		partial void OnValidate(System.Data.Linq.ChangeAction action);
 		partial void OnCreated();
-         partial void OnIdChanging( DbId<Person, System.Int32>  value);
+         partial void OnIdChanging( DbId<User, System.Int32>  value);
 		partial void OnIdChanged();
                 partial void OnFirstNameChanging( string  value);
 		partial void OnFirstNameChanged();
@@ -986,14 +487,13 @@ namespace Db.DataAccess.DataSet
         		#endregion
 
 		#region Construction
-		public Person()
+		public User()
 		{
 			Initialize();
 		}
 		
 		private void Initialize()
 		{
-			this._Addresses = new EntitySet<Address>(attach_Addresses, detach_Addresses);
 			this._Orders = new EntitySet<Order>(attach_Orders, detach_Orders);
 			OnCreated();
 		}
@@ -1002,7 +502,7 @@ namespace Db.DataAccess.DataSet
 		#region Column Mappings
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		[DataMember(Order=1)]
-        public   DbId<Person, System.Int32>  Id
+        public   DbId<User, System.Int32>  Id
 		{
 			get 
             { 
@@ -1021,7 +521,7 @@ namespace Db.DataAccess.DataSet
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		[DataMember(Order=2)]
         public   string  FirstName
 		{
@@ -1042,7 +542,7 @@ namespace Db.DataAccess.DataSet
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NChar(30) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		[DataMember(Order=3)]
         public   string  LastName
 		{
@@ -1063,7 +563,7 @@ namespace Db.DataAccess.DataSet
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		[DataMember(Order=4)]
         public   string  Email
 		{
@@ -1087,40 +587,9 @@ namespace Db.DataAccess.DataSet
 		#endregion
 		
 		#region Associations
-		private EntitySet<Address> _Addresses;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Person_Addresses", Storage="_Addresses", ThisKey="Id", OtherKey="PersonId", DeleteRule="NO ACTION")]
-		[DataMember(Order=5, EmitDefaultValue=false)]
-		public EntitySet<Address> Addresses
-		{
-			get 
-            {
-				if (serializing && !_Addresses.HasLoadedOrAssignedValues) 
-                {
-					return null;
-				}
-				return _Addresses;
-			}
-			set 
-            {
-				_Addresses.Assign(value);
-			}
-		}
-
-		private void attach_Addresses(Address entity)
-		{
-			SendPropertyChanging();
-			entity.Person = this;
-		}
-		
-		private void detach_Addresses(Address entity)
-		{
-			SendPropertyChanging();
-			entity.Person = null;
-		}
-		
 		private EntitySet<Order> _Orders;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Person_Orders", Storage="_Orders", ThisKey="Id", OtherKey="PersonId", DeleteRule="NO ACTION")]
-		[DataMember(Order=6, EmitDefaultValue=false)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_Order_User", Storage="_Orders", ThisKey="Id", OtherKey="UserId", DeleteRule="NO ACTION")]
+		[DataMember(Order=5, EmitDefaultValue=false)]
 		public EntitySet<Order> Orders
 		{
 			get 
@@ -1140,13 +609,13 @@ namespace Db.DataAccess.DataSet
 		private void attach_Orders(Order entity)
 		{
 			SendPropertyChanging();
-			entity.Person = this;
+			entity.User = this;
 		}
 		
 		private void detach_Orders(Order entity)
 		{
 			SendPropertyChanging();
-			entity.Person = null;
+			entity.User = null;
 		}
 		
 		#endregion
@@ -1168,571 +637,6 @@ namespace Db.DataAccess.DataSet
 			serializing = false;
 		}
 		
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
-    [Table(Name=@"dbo.TestTable1")]	[KnownType(typeof(TestTable1))]  
-    public partial class TestTable1 : DbEntity<TestTable1,System.Int32>
-	{
-
-        private  DbId<TestTable1, System.Int32>  _Id;
-        
-        private  string  _Dummy;
-        
-        private  int  _Dummy2;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnIdChanging( DbId<TestTable1, System.Int32>  value);
-		partial void OnIdChanged();
-                partial void OnDummyChanging( string  value);
-		partial void OnDummyChanged();
-                partial void OnDummy2Changing( int  value);
-		partial void OnDummy2Changed();
-        		#endregion
-
-		#region Construction
-		public TestTable1()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			this._TestTable2s = new EntitySet<TestTable2>(attach_TestTable2s, detach_TestTable2s);
-			this._TestTable3s = new EntitySet<TestTable3>(attach_TestTable3s, detach_TestTable3s);
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		[DataMember(Order=1)]
-        public   DbId<TestTable1, System.Int32>  Id
-		{
-			get 
-            { 
-                return this._Id; 
-            }
-			set 
-            {
-				if ((this._Id != value)) 
-                {
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Dummy", DbType="NChar(10) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=2)]
-        public   string  Dummy
-		{
-			get 
-            { 
-                return this._Dummy; 
-            }
-			set 
-            {
-				if ((this._Dummy != value)) 
-                {
-					this.OnDummyChanging(value);
-					this.SendPropertyChanging();
-					this._Dummy = value;
-					this.SendPropertyChanged("Dummy");
-					this.OnDummyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Dummy2", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=3)]
-        public   int  Dummy2
-		{
-			get 
-            { 
-                return this._Dummy2; 
-            }
-			set 
-            {
-				if ((this._Dummy2 != value)) 
-                {
-					this.OnDummy2Changing(value);
-					this.SendPropertyChanging();
-					this._Dummy2 = value;
-					this.SendPropertyChanged("Dummy2");
-					this.OnDummy2Changed();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Associations
-		private EntitySet<TestTable2> _TestTable2s;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_TestTable1_TestTable2", Storage="_TestTable2s", ThisKey="Id", OtherKey="TestTable1Id", DeleteRule="NO ACTION")]
-		[DataMember(Order=4, EmitDefaultValue=false)]
-		public EntitySet<TestTable2> TestTable2s
-		{
-			get 
-            {
-				if (serializing && !_TestTable2s.HasLoadedOrAssignedValues) 
-                {
-					return null;
-				}
-				return _TestTable2s;
-			}
-			set 
-            {
-				_TestTable2s.Assign(value);
-			}
-		}
-
-		private void attach_TestTable2s(TestTable2 entity)
-		{
-			SendPropertyChanging();
-			entity.TestTable1 = this;
-		}
-		
-		private void detach_TestTable2s(TestTable2 entity)
-		{
-			SendPropertyChanging();
-			entity.TestTable1 = null;
-		}
-		
-		private EntitySet<TestTable3> _TestTable3s;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_TestTable1_TestTable3", Storage="_TestTable3s", ThisKey="Id", OtherKey="TestTable1Id", DeleteRule="NO ACTION")]
-		[DataMember(Order=5, EmitDefaultValue=false)]
-		public EntitySet<TestTable3> TestTable3s
-		{
-			get 
-            {
-				if (serializing && !_TestTable3s.HasLoadedOrAssignedValues) 
-                {
-					return null;
-				}
-				return _TestTable3s;
-			}
-			set 
-            {
-				_TestTable3s.Assign(value);
-			}
-		}
-
-		private void attach_TestTable3s(TestTable3 entity)
-		{
-			SendPropertyChanging();
-			entity.TestTable1 = this;
-		}
-		
-		private void detach_TestTable3s(TestTable3 entity)
-		{
-			SendPropertyChanging();
-			entity.TestTable1 = null;
-		}
-		
-		#endregion
-		
-		#region Serialization
-		private bool serializing;
-		
-		[OnSerializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerializing(StreamingContext context)
-		{
-			serializing = true;
-		}
-		
-		[OnSerialized()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public void OnSerialized(StreamingContext context)
-		{
-			serializing = false;
-		}
-		
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
-    [Table(Name=@"dbo.TestTable2")]	[KnownType(typeof(TestTable2))]  
-    public partial class TestTable2 : DbEntity<TestTable2,System.Guid>
-	{
-
-        private  DbId<TestTable2, System.Guid>  _Id;
-        
-        private  string  _Dummy1;
-        
-        private  int  _Dummy2;
-        
-        private  DbId<TestTable1, System.Int32>  _TestTable1Id;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnIdChanging( DbId<TestTable2, System.Guid>  value);
-		partial void OnIdChanged();
-                partial void OnDummy1Changing( string  value);
-		partial void OnDummy1Changed();
-                partial void OnDummy2Changing( int  value);
-		partial void OnDummy2Changed();
-                partial void OnTestTable1IdChanging( DbId<TestTable1, System.Int32>  value);
-		partial void OnTestTable1IdChanged();
-        		#endregion
-
-		#region Construction
-		public TestTable2()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			this._TestTable1 = default(EntityRef<TestTable1>); 
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		[DataMember(Order=1)]
-        public   DbId<TestTable2, System.Guid>  Id
-		{
-			get 
-            { 
-                return this._Id; 
-            }
-			set 
-            {
-				if ((this._Id != value)) 
-                {
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Dummy1", DbType="NChar(10) NOT NULL", CanBeNull=false)]
-		[DataMember(Order=2)]
-        public   string  Dummy1
-		{
-			get 
-            { 
-                return this._Dummy1; 
-            }
-			set 
-            {
-				if ((this._Dummy1 != value)) 
-                {
-					this.OnDummy1Changing(value);
-					this.SendPropertyChanging();
-					this._Dummy1 = value;
-					this.SendPropertyChanged("Dummy1");
-					this.OnDummy1Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Dummy2", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=3)]
-        public   int  Dummy2
-		{
-			get 
-            { 
-                return this._Dummy2; 
-            }
-			set 
-            {
-				if ((this._Dummy2 != value)) 
-                {
-					this.OnDummy2Changing(value);
-					this.SendPropertyChanging();
-					this._Dummy2 = value;
-					this.SendPropertyChanged("Dummy2");
-					this.OnDummy2Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestTable1Id", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=4)]
-        public   DbId<TestTable1, System.Int32>  TestTable1Id
-		{
-			get 
-            { 
-                return this._TestTable1Id; 
-            }
-			set 
-            {
-				if ((this._TestTable1Id != value)) 
-                {
-					if (this._TestTable1.HasLoadedOrAssignedValue) 
-                    {
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTestTable1IdChanging(value);
-					this.SendPropertyChanging();
-					this._TestTable1Id = value;
-					this.SendPropertyChanged("TestTable1Id");
-					this.OnTestTable1IdChanged();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Associations
-		private EntityRef<TestTable1> _TestTable1;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_TestTable1_TestTable2", Storage="_TestTable1", ThisKey="TestTable1Id", OtherKey="Id", IsForeignKey=true)]
-		[DataMember(Order=5, EmitDefaultValue=false)]
-		public TestTable1 TestTable1
-		{
-			get 
-            {
-				return this._TestTable1.Entity;
-			}
-			set 
-            {
-				TestTable1 previousValue = this._TestTable1.Entity;
-				if (((previousValue != value) 
-                            || (this._TestTable1.HasLoadedOrAssignedValue == false))) 
-                {
-					this.SendPropertyChanging();
-					if ((previousValue != null)) 
-                    {
-						this._TestTable1.Entity = null;
-						previousValue.TestTable2s.Remove(this);
-					}
-					this._TestTable1.Entity = value;
-					if ((value != null)) 
-                    {
-						value.TestTable2s.Add(this);
-						this._TestTable1Id = value.Id;
-					}
-					else 
-                    {
-						this._TestTable1Id = default;
-					}
-					this.SendPropertyChanged("TestTable1");
-				}
-			}
-		}
-
-		#endregion
-		
-		#region Serialization
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
-    [Table(Name=@"dbo.TestTable3")]	[KnownType(typeof(TestTable3))]  
-    public partial class TestTable3 : DbEntity<TestTable3,System.Int32>
-	{
-
-        private  DbId<TestTable3, System.Int32>  _TestTable3Id;
-        
-        private  DbId<TestTable1, System.Int32>  _TestTable1Id;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnTestTable3IdChanging( DbId<TestTable3, System.Int32>  value);
-		partial void OnTestTable3IdChanged();
-                partial void OnTestTable1IdChanging( DbId<TestTable1, System.Int32>  value);
-		partial void OnTestTable1IdChanged();
-        		#endregion
-
-		#region Construction
-		public TestTable3()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			this._TestTable1 = default(EntityRef<TestTable1>); 
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestTable3Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		[DataMember(Order=1)]
-        public   DbId<TestTable3, System.Int32>  TestTable3Id
-		{
-			get 
-            { 
-                return this._TestTable3Id; 
-            }
-			set 
-            {
-				if ((this._TestTable3Id != value)) 
-                {
-					this.OnTestTable3IdChanging(value);
-					this.SendPropertyChanging();
-					this._TestTable3Id = value;
-					this.SendPropertyChanged("TestTable3Id");
-					this.OnTestTable3IdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TestTable1Id", DbType="Int NOT NULL", CanBeNull=false)]
-		[DataMember(Order=2)]
-        public   DbId<TestTable1, System.Int32>  TestTable1Id
-		{
-			get 
-            { 
-                return this._TestTable1Id; 
-            }
-			set 
-            {
-				if ((this._TestTable1Id != value)) 
-                {
-					if (this._TestTable1.HasLoadedOrAssignedValue) 
-                    {
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTestTable1IdChanging(value);
-					this.SendPropertyChanging();
-					this._TestTable1Id = value;
-					this.SendPropertyChanged("TestTable1Id");
-					this.OnTestTable1IdChanged();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Associations
-		private EntityRef<TestTable1> _TestTable1;
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FK_TestTable1_TestTable3", Storage="_TestTable1", ThisKey="TestTable1Id", OtherKey="Id", IsForeignKey=true)]
-		[DataMember(Order=3, EmitDefaultValue=false)]
-		public TestTable1 TestTable1
-		{
-			get 
-            {
-				return this._TestTable1.Entity;
-			}
-			set 
-            {
-				TestTable1 previousValue = this._TestTable1.Entity;
-				if (((previousValue != value) 
-                            || (this._TestTable1.HasLoadedOrAssignedValue == false))) 
-                {
-					this.SendPropertyChanging();
-					if ((previousValue != null)) 
-                    {
-						this._TestTable1.Entity = null;
-						previousValue.TestTable3s.Remove(this);
-					}
-					this._TestTable1.Entity = value;
-					if ((value != null)) 
-                    {
-						value.TestTable3s.Add(this);
-						this._TestTable1Id = value.Id;
-					}
-					else 
-                    {
-						this._TestTable1Id = default;
-					}
-					this.SendPropertyChanged("TestTable1");
-				}
-			}
-		}
-
-		#endregion
-		
-		#region Serialization
-		[OnDeserializing()]
-		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
-		public  void OnDeserializing(StreamingContext context)
-		{
-			Initialize();
-		}
-		#endregion
-	}
-[DataContract(IsReference=true)]
-        
-    [Table(Name=@"dbo.TestTable4")]	[KnownType(typeof(TestTable4))]  
-    public partial class TestTable4 : DbEntity<TestTable4,System.Int32>
-	{
-
-        private  DbId<TestTable4, System.Int32>  _Id;
-        
-        #region Extensibility Method Definitions
-		partial void OnLoaded();
-		partial void OnValidate(System.Data.Linq.ChangeAction action);
-		partial void OnCreated();
-         partial void OnIdChanging( DbId<TestTable4, System.Int32>  value);
-		partial void OnIdChanged();
-        		#endregion
-
-		#region Construction
-		public TestTable4()
-		{
-			Initialize();
-		}
-		
-		private void Initialize()
-		{
-			OnCreated();
-		}
-		#endregion
-
-		#region Column Mappings
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		[DataMember(Order=1)]
-        public   DbId<TestTable4, System.Int32>  Id
-		{
-			get 
-            { 
-                return this._Id; 
-            }
-			set 
-            {
-				if ((this._Id != value)) 
-                {
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		#endregion
-		
-		#region Serialization
 		[OnDeserializing()]
 		[EditorBrowsableAttribute(EditorBrowsableState.Never)]
 		public  void OnDeserializing(StreamingContext context)

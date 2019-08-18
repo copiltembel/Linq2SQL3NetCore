@@ -161,5 +161,13 @@
         {
             return Type.GetTypeCode(typeof(TIdStorage));
         }
+
+        public TIdStorage SimpleValue
+        {
+            get
+            {
+                return _Id;
+            }
+        }
     }
 }
